@@ -73,7 +73,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     }
 
     @Override
-    public Boolean roleUpdate(String selectItem, Byte sidebarId) {
+    public Boolean roleUpdate(String selectItem, Long sidebarId) {
         Sidebar sidebar = new Sidebar();
         sidebar.setSidebarId(sidebarId);
         return sidebarMapper.updateById(sidebar) > Constant.ZERO;
@@ -91,7 +91,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         userInfo.setUsername(author);
         userInfo.setEmail("1363560774@qq.com");
         Sidebar sidebar = new Sidebar();
-        sidebar.setSidebarId((byte) 222);
+        sidebar.setSidebarId(222L);
         Boolean u = userMapper.insert(userInfo) > Constant.ZERO;
         Boolean s = sidebarMapper.insert(sidebar) > Constant.ZERO;
         return u && s;
@@ -125,5 +125,10 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         return userMapper.selectList(Wrappers.<UserInfo>lambdaQuery()
                 .isNotNull(UserInfo::getUserStatus)
                 .like(StringUtils.isNotEmpty(username), UserInfo::getUsername, username));
+    }
+
+    @Override
+    public List<Sidebar> selectSidebarList() {
+        return sidebarMapper.selectRoleSidebar();
     }
 }

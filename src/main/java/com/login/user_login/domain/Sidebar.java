@@ -18,7 +18,7 @@ public class Sidebar {
      * 侧边栏id
      */
     @TableId
-    private Byte sidebarId;
+    private Long sidebarId;
     /**
      * 侧边栏路径
      */

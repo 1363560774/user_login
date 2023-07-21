@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PostMapping("/roleUpdate")
-    public ResponseEntity<Object> roleUpdate(String selectItem, Byte sidebarId) {
+    public ResponseEntity<Object> roleUpdate(String selectItem, Long sidebarId) {
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleUpdate(selectItem, sidebarId)));
     }
 
@@ -78,5 +78,10 @@ public class UserController {
     @PostMapping("/roleCreate")
     public ResponseEntity<Object> roleCreate(String author, String selectItem) {
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleCreate(author, selectItem)));
+    }
+
+    @GetMapping("/selectSidebarList")
+    public ResponseEntity<Object> getSidebarList() {
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.selectSidebarList()));
     }
 }

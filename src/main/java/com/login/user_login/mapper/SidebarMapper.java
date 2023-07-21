@@ -18,6 +18,9 @@ import java.util.List;
 @Mapper
 public interface SidebarMapper extends BaseMapper<Sidebar>, Serializable {
 
-    @Select("SELECT us.* FROM tb_user_sidebar us INNER JOIN tb_user_role_sidebar_rel ursr ON ursr.sidebar_id = us.sidebar_id INNER JOIN tb_user_role ur ON ur.role_id = ursr.role_id WHERE ur.role_id = #{roleId}")
-    List<Sidebar> selectRoleSidebar(@Param("roleId") Byte roleId);
+    @Select("SELECT us.* FROM tb_sidebar us INNER JOIN tb_user_role_sidebar_rel ursr ON ursr.sidebar_id = us.sidebar_id INNER JOIN tb_user_role ur ON ur.role_id = ursr.role_id WHERE ur.role_id = #{roleId}")
+    List<Sidebar> selectRoleSidebarByRoleId(@Param("roleId") Byte roleId);
+
+    @Select("SELECT * FROM tb_sidebar")
+    List<Sidebar> selectRoleSidebar();
 }

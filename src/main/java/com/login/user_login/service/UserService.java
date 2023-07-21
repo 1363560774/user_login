@@ -3,6 +3,7 @@ package com.login.user_login.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.login.user_login.common.Page;
+import com.login.user_login.domain.Sidebar;
 import com.login.user_login.domain.UserInfo;
 
 import java.util.List;
@@ -48,7 +49,7 @@ public interface UserService extends IService<UserInfo> {
      * @param sidebarId 侧边栏id
      * @return 是否成功
      */
-    Boolean roleUpdate(String selectItem, Byte sidebarId);
+    Boolean roleUpdate(String selectItem, Long sidebarId);
 
     /**
      * admin获取UserInfo拥有权限的页面
@@ -68,4 +69,6 @@ public interface UserService extends IService<UserInfo> {
     Page<UserInfo> userListPage(Page<UserInfo> userInfoPage);
 
     List<UserInfo> userListByUsername(String username);
+
+    List<Sidebar> selectSidebarList();
 }
