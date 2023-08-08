@@ -8,11 +8,11 @@
         <version>3.1.1</version>
         <relativePath/> <!-- lookup parent from repository -->
     </parent>
-    <groupId>com.login</groupId>
-    <artifactId>user_login</artifactId>
+    <groupId>com.yzl.service</groupId>
+    <artifactId>yzl-service</artifactId>
     <version>0.0.1-SNAPSHOT</version>
-    <name>user_login</name>
-    <description>user_login</description>
+    <name>yzl-service</name>
+    <description>yzl-service</description>
     <properties>
         <java.version>17</java.version>
     </properties>
@@ -80,6 +80,12 @@
             <version>3.0.2</version>
             <scope>test</scope>
         </dependency>
+<!--        &lt;!&ndash; https://mvnrepository.com/artifact/com.github.oshi/oshi-core &ndash;&gt;-->
+<!--        <dependency>-->
+<!--            <groupId>com.github.oshi</groupId>-->
+<!--            <artifactId>oshi-core</artifactId>-->
+<!--            <version>6.4.0</version>-->
+<!--        </dependency>-->
     </dependencies>
 
     <build>
