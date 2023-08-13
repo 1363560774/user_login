@@ -5,6 +5,7 @@ import com.yzl.service.common.ReturnMessage;
 import com.yzl.service.common.utils.WxTokenUtils;
 import com.yzl.service.domain.Login;
 import com.yzl.service.domain.UserInfo;
+import com.yzl.service.dto.WxDto;
 import com.yzl.service.properties.WxProperties;
 import com.yzl.service.service.LoginService;
 import com.yzl.service.service.UserService;
@@ -67,6 +68,22 @@ public class LoginController {
             return ResponseEntity.ok().body(ReturnMessage.errorMessageDate(null,"登录失败，请校验用户名密码是否正确"));
         }
         return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(null));
+    }
+
+    @GetMapping("/xcxLogin")
+    public ResponseEntity<Object> xcxLogin(String js_code){
+        // 小程序登录
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+        url = String.format(url, wxProperties.getAppid(), wxProperties.getSecret(), js_code);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        URI uri = builder.build().encode().toUri();
+        String resp = getRestTemplate().getForObject(uri, String.class);
+        if (resp != null && resp.contains("openid")) {
+            WxDto jsonObject = JSONObject.parseObject(resp, WxDto.class);
+            return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(jsonObject));
+        } else {
+            return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(null));
+        }
     }
 
     @PostMapping("/logout")
@@ -270,7 +287,7 @@ public class LoginController {
         messageConverters.add(new ByteArrayHttpMessageConverter());
         messageConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
         messageConverters.add(new ResourceHttpMessageConverter());
-        messageConverters.add(new SourceHttpMessageConverter<Source>());
+        messageConverters.add(new SourceHttpMessageConverter<>());
         messageConverters.add(new AllEncompassingFormHttpMessageConverter());
         messageConverters.add(new MappingJackson2HttpMessageConverter());
         RestTemplate restTemplate = new RestTemplate(messageConverters);
