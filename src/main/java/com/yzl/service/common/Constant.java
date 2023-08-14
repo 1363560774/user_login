@@ -8,6 +8,8 @@ package com.yzl.service.common;
  */
 public interface Constant {
 
+    String USER_SESSION_KEY = "USER_SESSION_KEY";
+
     String ITEM_TYPE_SINGLE = "SINGLE";
     String ITEM_TYPE_MULTIPLE = "MULTIPLE";
     String ITEM_TYPE_JUDGE = "JUDGE";

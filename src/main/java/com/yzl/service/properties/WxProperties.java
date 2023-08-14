@@ -19,10 +19,12 @@ public class WxProperties {
     private String appid;
     private String secret;
     private String grant_type;
+    private Long expireTime;
     private String wxToken;
     private String weCatAppId;
     private String weCatAppSecret;
     private String weCatRedirectUrl;
+    private String cookieName;
 
     private PublicKey publicKey;
     private PrivateKey privateKey;

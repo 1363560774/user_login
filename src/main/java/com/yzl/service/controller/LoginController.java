@@ -2,10 +2,10 @@ package com.yzl.service.controller;
 
 import com.alibaba.fastjson.JSONObject;
 import com.yzl.service.common.ReturnMessage;
+import com.yzl.service.common.utils.RestTemplate;
 import com.yzl.service.common.utils.WxTokenUtils;
 import com.yzl.service.domain.Login;
 import com.yzl.service.domain.UserInfo;
-import com.yzl.service.dto.WxDto;
 import com.yzl.service.properties.WxProperties;
 import com.yzl.service.service.LoginService;
 import com.yzl.service.service.UserService;
@@ -15,26 +15,14 @@ import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
-import org.springframework.http.converter.ByteArrayHttpMessageConverter;
-import org.springframework.http.converter.HttpMessageConverter;
-import org.springframework.http.converter.ResourceHttpMessageConverter;
-import org.springframework.http.converter.StringHttpMessageConverter;
-import org.springframework.http.converter.json.MappingJackson2HttpMessageConverter;
-import org.springframework.http.converter.support.AllEncompassingFormHttpMessageConverter;
-import org.springframework.http.converter.xml.SourceHttpMessageConverter;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.client.RestTemplate;
 import org.springframework.web.util.UriComponentsBuilder;
-import javax.xml.transform.Source;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.net.URI;
 import java.net.URLEncoder;
 import java.nio.charset.StandardCharsets;
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -72,18 +60,7 @@ public class LoginController {
 
     @GetMapping("/xcxLogin")
     public ResponseEntity<Object> xcxLogin(String js_code){
-        // 小程序登录
-        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
-        url = String.format(url, wxProperties.getAppid(), wxProperties.getSecret(), js_code);
-        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
-        URI uri = builder.build().encode().toUri();
-        String resp = getRestTemplate().getForObject(uri, String.class);
-        if (resp != null && resp.contains("openid")) {
-            WxDto jsonObject = JSONObject.parseObject(resp, WxDto.class);
-            return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(jsonObject));
-        } else {
-            return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(null));
-        }
+        return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(loginService.xcxLogin(js_code)));
     }
 
     @PostMapping("/logout")
@@ -220,7 +197,7 @@ public class LoginController {
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         URI uri = builder.build().encode().toUri();
 
-        String resp = getRestTemplate().getForObject(uri, String.class);
+        String resp = RestTemplate.getRestTemplate().getForObject(uri, String.class);
         if (resp != null && resp.contains("openid")) {
             JSONObject jsonObject = JSONObject.parseObject(resp);
             String access_token = jsonObject.getString("access_token");
@@ -246,7 +223,7 @@ public class LoginController {
         url = String.format(url, accessToken, openId);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         URI uri = builder.build().encode().toUri();
-        String resp = getRestTemplate().getForObject(uri, String.class);
+        String resp = RestTemplate.getRestTemplate().getForObject(uri, String.class);
         if (resp != null && resp.contains("errcode")) {
             return null;
         } else {
@@ -271,27 +248,9 @@ public class LoginController {
         url = String.format(url, wxProperties.getWeCatAppId(), refresh_token);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
         URI uri = builder.build().encode().toUri();
-        ResponseEntity<JSONObject> resp = getRestTemplate().getForEntity(uri, JSONObject.class);
+        ResponseEntity<JSONObject> resp = RestTemplate.getRestTemplate().getForEntity(uri, JSONObject.class);
         JSONObject jsonObject = resp.getBody();
         assert jsonObject != null;
         return jsonObject.getString("access_token");
-    }
-
-    /**
-     * @return 模板
-     */
-    public static RestTemplate getRestTemplate() {// 手动添加
-        SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setReadTimeout(120000);
-        List<HttpMessageConverter<?>> messageConverters = new LinkedList<>();
-        messageConverters.add(new ByteArrayHttpMessageConverter());
-        messageConverters.add(new StringHttpMessageConverter(StandardCharsets.UTF_8));
-        messageConverters.add(new ResourceHttpMessageConverter());
-        messageConverters.add(new SourceHttpMessageConverter<>());
-        messageConverters.add(new AllEncompassingFormHttpMessageConverter());
-        messageConverters.add(new MappingJackson2HttpMessageConverter());
-        RestTemplate restTemplate = new RestTemplate(messageConverters);
-        restTemplate.setRequestFactory(requestFactory);
-        return restTemplate;
     }
 }

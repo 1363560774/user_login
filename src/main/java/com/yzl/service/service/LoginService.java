@@ -2,6 +2,7 @@ package com.yzl.service.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yzl.service.domain.Login;
+import com.yzl.service.dto.WxDto;
 
 /**
  * 注释
@@ -17,4 +18,6 @@ public interface LoginService extends IService<Login> {
      * @return 登录状态
      */
     String login(Login userLogin);
+
+    WxDto xcxLogin(String jsCode);
 }

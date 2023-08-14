@@ -1,13 +1,23 @@
 package com.yzl.service.service.impl;
 
+import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
+import com.yzl.service.common.RedisKey;
+import com.yzl.service.common.utils.RestTemplate;
 import com.yzl.service.domain.Login;
+import com.yzl.service.dto.WxDto;
 import com.yzl.service.mapper.LoginMapper;
+import com.yzl.service.properties.WxProperties;
 import com.yzl.service.service.LoginService;
 import com.yzl.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.stereotype.Service;
+import org.springframework.web.util.UriComponentsBuilder;
+
+import java.net.URI;
+import java.util.concurrent.TimeUnit;
 
 /**
  * 注释
@@ -21,6 +31,12 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
     @Autowired
     private UserService userService;
+
+    @Autowired
+    private WxProperties wxProperties;
+
+    @Autowired
+    private StringRedisTemplate redisTemplate;
 
 //    @Autowired
 //    private SidebarMapper sidebarMapper;
@@ -45,5 +61,22 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 //        // 利用JWT工具，生成token返回
 //        return JwtUtils.generateToken(login, jwtProp.getPrivateKey(), jwtProp.getExpire());
         return newPassword;
+    }
+
+    @Override
+    public WxDto xcxLogin(String jsCode) {
+        String url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
+        url = String.format(url, wxProperties.getAppid(), wxProperties.getSecret(), jsCode);
+        UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
+        URI uri = builder.build().encode().toUri();
+        String resp = RestTemplate.getRestTemplate().getForObject(uri, String.class);
+        if (resp != null && resp.contains("openid")) {
+            WxDto wxDto = JSONObject.parseObject(resp, WxDto.class);
+            String userSessionKey = RedisKey.loadUserSessionKey(wxDto.getUnionId());
+            redisTemplate.opsForValue().set(userSessionKey, wxDto.getSessionKey());
+            redisTemplate.expire(userSessionKey, wxProperties.getExpireTime(), TimeUnit.SECONDS);
+            return wxDto;
+        }
+        return null;
     }
 }
