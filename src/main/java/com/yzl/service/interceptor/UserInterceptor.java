@@ -1,6 +1,8 @@
 package com.yzl.service.interceptor;
 
+import com.yzl.service.common.ExceptionEnum;
 import com.yzl.service.common.RedisKey;
+import com.yzl.service.common.YzlException;
 import com.yzl.service.common.utils.CookieUtils;
 import com.yzl.service.properties.NonInterceptorProperties;
 import com.yzl.service.properties.WxProperties;
@@ -10,8 +12,11 @@ import org.apache.commons.lang3.StringUtils;
 import org.springframework.data.redis.core.StringRedisTemplate;
 import org.springframework.web.servlet.HandlerInterceptor;
 
+import java.util.concurrent.TimeUnit;
+
 /**
  * @author kai
+ * @date 2023/08/14 17:32
  */
 public class UserInterceptor implements HandlerInterceptor {
 
@@ -36,12 +41,18 @@ public class UserInterceptor implements HandlerInterceptor {
         }
         // 获取cookie中的unionId
         String unionId = CookieUtils.getCookieValue(request, wxProperties.getCookieName());
-        String sessionKey = redisTemplate.opsForValue().get(RedisKey.loadUserSessionKey(unionId));
-        if (StringUtils.isNotBlank(sessionKey)) {
-            UserContainer.setUnionId(unionId);
-            return true;
+        if (StringUtils.isNotBlank(unionId)) {
+            String sessionKey = redisTemplate.opsForValue().get(RedisKey.loadUserSessionKey(unionId));
+            if (StringUtils.isNotBlank(sessionKey)) {
+                String userSessionKey = RedisKey.loadUserSessionKey(unionId);
+                redisTemplate.opsForValue().set(userSessionKey, sessionKey);
+                redisTemplate.expire(userSessionKey, wxProperties.getExpireTime(), TimeUnit.SECONDS);
+                UserContainer.setUnionId(unionId);
+                return true;
+            }
+            throw new YzlException(ExceptionEnum.USER_TOKEN_INVALIDATION);
         }
-        return false;
+        throw new YzlException(ExceptionEnum.USER_TOKEN_INVALIDATION);
     }
 
     @Override
