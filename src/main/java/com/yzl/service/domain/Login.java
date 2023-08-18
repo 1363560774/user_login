@@ -2,9 +2,7 @@ package com.yzl.service.domain;
 
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
-import lombok.Getter;
-import lombok.Setter;
-import lombok.ToString;
+import lombok.*;
 
 /**
  * 登录表
@@ -12,11 +10,10 @@ import lombok.ToString;
  * @author kai
  * @date 2023/07/19 5:28 下午
  */
-@Getter
-@Setter
-@ToString
+@Data
 @TableName("tb_login")
-public class Login {
+@EqualsAndHashCode(callSuper = true)
+public class Login extends CommonFields {
 
     /**
      * 用户编号

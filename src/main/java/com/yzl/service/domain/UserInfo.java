@@ -4,8 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
-
-import java.util.Date;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户信息
@@ -14,8 +13,9 @@ import java.util.Date;
  * @date 2023/07/19 5:28 下午
  */
 @Data
-@TableName("tb_user_info")
-public class UserInfo {
+@TableName("tb_user")
+@EqualsAndHashCode(callSuper = true)
+public class UserInfo extends CommonFields {
 
     /**
      * 用户id
@@ -54,10 +54,6 @@ public class UserInfo {
      * 用户状态（0->创建，1->激活）
      */
     private Boolean userStatus;
-    /**
-     * 注册时间
-     */
-    private Date createTime;
     /**
      * 个人简介
      */

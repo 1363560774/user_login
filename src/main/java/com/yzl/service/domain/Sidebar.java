@@ -3,6 +3,7 @@ package com.yzl.service.domain;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 侧边栏表
@@ -12,7 +13,8 @@ import lombok.Data;
  */
 @Data
 @TableName("tb_sidebar")
-public class Sidebar {
+@EqualsAndHashCode(callSuper = true)
+public class Sidebar extends CommonFields {
 
     /**
      * 侧边栏id

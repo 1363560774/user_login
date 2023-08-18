@@ -56,7 +56,7 @@ public class UserController {
     @GetMapping("/getUserInfoById")
     public ResponseEntity<Object> getUserInfoById(@RequestParam Long userId) {
         UserInfo userInfo = userService.getById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userId));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userInfo));
     }
 
     @DeleteMapping("/deleteUserInfo")

@@ -4,6 +4,7 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
+import lombok.EqualsAndHashCode;
 
 /**
  * 用户角色关联表
@@ -13,7 +14,8 @@ import lombok.Data;
  */
 @Data
 @TableName("tb_user_role_rel")
-public class UserRoleRel {
+@EqualsAndHashCode(callSuper = true)
+public class UserRoleRel extends CommonFields {
 
     /**
      * 用户id
