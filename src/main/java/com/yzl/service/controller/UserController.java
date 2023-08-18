@@ -54,7 +54,7 @@ public class UserController {
     }
 
     @GetMapping("/getUserInfoById")
-    public ResponseEntity<Object> getUserInfoById(@RequestParam Long userId) {
+    public ResponseEntity<Object> getUserInfoById(@RequestParam String userId) {
         UserInfo userInfo = userService.getById(userId);
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userInfo));
     }
@@ -66,7 +66,7 @@ public class UserController {
     }
 
     @PostMapping("/roleUpdate")
-    public ResponseEntity<Object> roleUpdate(String selectItem, Long sidebarId) {
+    public ResponseEntity<Object> roleUpdate(String selectItem, String sidebarId) {
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleUpdate(selectItem, sidebarId)));
     }
 

@@ -43,7 +43,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     @Override
     @Transactional
     public Boolean addUserInfo(UserInfo userInfo) {
-        long userId = IdWorker.getId();
+        String userId = IdWorker.getIdStr();
         userInfo.setUserId(userId);
         userInfo.setUserStatus(Boolean.FALSE);
         userInfo.setCreateTime(new Date());
@@ -76,7 +76,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     }
 
     @Override
-    public Boolean roleUpdate(String selectItem, Long sidebarId) {
+    public Boolean roleUpdate(String selectItem, String sidebarId) {
         Sidebar sidebar = new Sidebar();
         sidebar.setSidebarId(sidebarId);
         return sidebarMapper.updateById(sidebar) > Constant.ZERO;
@@ -90,11 +90,11 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     @Override @Transactional
     public Boolean roleCreate(String author, String selectItem) {
         UserInfo userInfo = new UserInfo();
-        userInfo.setUserId(IdWorker.getId());
+        userInfo.setUserId(IdWorker.getIdStr());
         userInfo.setUsername(author);
         userInfo.setEmail("1363560774@qq.com");
         Sidebar sidebar = new Sidebar();
-        sidebar.setSidebarId(222L);
+        sidebar.setSidebarId("222");
         Boolean u = userMapper.insert(userInfo) > Constant.ZERO;
         Boolean s = sidebarMapper.insert(sidebar) > Constant.ZERO;
         return u && s;

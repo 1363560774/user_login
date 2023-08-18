@@ -49,7 +49,7 @@ public interface UserService extends IService<UserInfo> {
      * @param sidebarId 侧边栏id
      * @return 是否成功
      */
-    Boolean roleUpdate(String selectItem, Long sidebarId);
+    Boolean roleUpdate(String selectItem, String sidebarId);
 
     /**
      * admin获取UserInfo拥有权限的页面

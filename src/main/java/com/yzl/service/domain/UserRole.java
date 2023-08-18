@@ -23,7 +23,7 @@ public class UserRole extends CommonFields {
      * 角色id
      */
     @TableId
-    private Byte roleId;
+    private String roleId;
     /**
      * 角色类型
      */

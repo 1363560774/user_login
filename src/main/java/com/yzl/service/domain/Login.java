@@ -19,7 +19,7 @@ public class Login extends CommonFields {
      * 用户编号
      */
     @TableId
-    private Long loginId;
+    private String loginId;
 
     /**
      * 登录名

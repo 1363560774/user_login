@@ -21,7 +21,7 @@ public class UserInfo extends CommonFields {
      * 用户id
      */
     @TableId
-    private Long userId;
+    private String userId;
     /**
      * 用户名
      */

@@ -21,7 +21,7 @@ public class UserRoleRel extends CommonFields {
      * 用户id
      */
     @TableId
-    private Long userId;
+    private String userId;
     /**
      * 角色id
      */

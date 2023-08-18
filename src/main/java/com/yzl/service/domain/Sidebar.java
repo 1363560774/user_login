@@ -20,7 +20,7 @@ public class Sidebar extends CommonFields {
      * 侧边栏id
      */
     @TableId
-    private Long sidebarId;
+    private String sidebarId;
     /**
      * 侧边栏路径
      */
