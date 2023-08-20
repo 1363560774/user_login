@@ -71,7 +71,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
     }
 
     @Override
-    public WxDto xcxLogin(String jsCode) {
+    public WxDto xcxLogin(String jsCode, String loginIp) {
         String url = "https://api.weixin.qq.com/sns/jscode2session?appid=%s&secret=%s&js_code=%s&grant_type=authorization_code";
         url = String.format(url, wxProperties.getAppid(), wxProperties.getSecret(), jsCode);
         UriComponentsBuilder builder = UriComponentsBuilder.fromHttpUrl(url);
@@ -82,6 +82,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             LoginLog loginLog = new LoginLog();
             loginLog.setLogId(IdWorker.getIdStr());
             loginLog.setUnionId(wxDto.getUnionId());
+            loginLog.setLoginIp(loginIp);
             Date date = new Date();
             loginLog.setCreateTime(date);
             loginLog.setUpdateTime(date);

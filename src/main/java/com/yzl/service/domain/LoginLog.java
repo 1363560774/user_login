@@ -21,11 +21,14 @@ public class LoginLog extends CommonFields {
      */
     @TableId
     private String logId;
-
     /**
      * 微信唯一ID
      */
     private String unionId;
+    /**
+     * 登陆IP地址
+     */
+    private String loginIp;
     /**
      * 用户编号
      */

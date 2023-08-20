@@ -19,5 +19,11 @@ public interface LoginService extends IService<Login> {
      */
     String login(Login userLogin);
 
-    WxDto xcxLogin(String jsCode);
+    /**
+     * 小程序登陆
+     * @param jsCode 微信登陆code
+     * @param loginIp 登陆ip地址
+     * @return 登陆鉴权
+     */
+    WxDto xcxLogin(String jsCode, String loginIp);
 }
