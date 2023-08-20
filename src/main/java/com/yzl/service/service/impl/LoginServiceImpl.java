@@ -1,11 +1,14 @@
 package com.yzl.service.service.impl;
 
 import com.alibaba.fastjson.JSONObject;
+import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzl.service.common.RedisKey;
 import com.yzl.service.common.utils.RestTemplate;
 import com.yzl.service.domain.Login;
+import com.yzl.service.domain.LoginLog;
 import com.yzl.service.dto.WxDto;
+import com.yzl.service.mapper.LoginLogMapper;
 import com.yzl.service.mapper.LoginMapper;
 import com.yzl.service.properties.WxProperties;
 import com.yzl.service.service.LoginService;
@@ -17,6 +20,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.util.UriComponentsBuilder;
 
 import java.net.URI;
+import java.util.Date;
 import java.util.concurrent.TimeUnit;
 
 /**
@@ -37,6 +41,9 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
 
     @Autowired
     private StringRedisTemplate redisTemplate;
+
+    @Autowired
+    private LoginLogMapper loginLogMapper;
 
 //    @Autowired
 //    private SidebarMapper sidebarMapper;
@@ -72,6 +79,13 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
         String resp = RestTemplate.getRestTemplate().getForObject(uri, String.class);
         if (resp != null && resp.contains("openid")) {
             WxDto wxDto = JSONObject.parseObject(resp, WxDto.class);
+            LoginLog loginLog = new LoginLog();
+            loginLog.setLogId(IdWorker.getIdStr());
+            loginLog.setUnionId(wxDto.getUnionId());
+            Date date = new Date();
+            loginLog.setCreateTime(date);
+            loginLog.setUpdateTime(date);
+            loginLogMapper.insert(loginLog);
             String userSessionKey = RedisKey.loadUserSessionKey(wxDto.getUnionId());
             redisTemplate.opsForValue().set(userSessionKey, wxDto.getSessionKey());
             redisTemplate.expire(userSessionKey, wxProperties.getExpireTime(), TimeUnit.SECONDS);
