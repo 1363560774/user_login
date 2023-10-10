@@ -18,70 +18,72 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("user")
+@CrossOrigin(origins = {"http://kai.zhaokai96.com:1024","http://localhost:1024"}, allowCredentials = "true")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
+    @CrossOrigin
     @GetMapping("/userListPage")
     public ResponseEntity<Object> userListPage(Page<UserInfo> userInfoPage){
         Page<UserInfo> examItems = userService.userListPage(userInfoPage);
-        return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(examItems));
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(examItems));
     }
 
     @GetMapping("/userList")
     public ResponseEntity<Object> userList(String username){
         List<UserInfo> examItems = userService.userListByUsername(username);
-        return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(examItems));
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(examItems));
     }
 
     @PostMapping("/register")
     public ResponseEntity<Object> register(@RequestBody UserInfo userInfo) {
         Boolean data = userService.addUserInfo(userInfo);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(data));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(data));
     }
 
     @PostMapping("/addUserInfo")
     public ResponseEntity<Object> addUserInfo(@RequestBody UserInfo userInfo) {
         Boolean data = userService.addUserInfo(userInfo);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(data));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(data));
     }
 
     @PutMapping("/alterUserInfo")
     public ResponseEntity<Object> alterUserInfo(@RequestBody UserInfo userInfo) {
         Boolean data = userService.alterUserInfo(userInfo);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(data));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(data));
     }
 
     @GetMapping("/getUserInfoById")
     public ResponseEntity<Object> getUserInfoById(@RequestParam String userId) {
         UserInfo userInfo = userService.getById(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userInfo));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userInfo));
     }
 
     @DeleteMapping("/deleteUserInfo")
     public ResponseEntity<Object> deleteUserInfo(@RequestParam Long userId) {
         Boolean data = userService.deleteUserInfo(userId);
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(data));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(data));
     }
 
     @PostMapping("/roleUpdate")
     public ResponseEntity<Object> roleUpdate(String selectItem, String sidebarId) {
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleUpdate(selectItem, sidebarId)));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.roleUpdate(selectItem, sidebarId)));
     }
 
     @PostMapping("/roleDelete")
     public ResponseEntity<Object> roleDelete(Byte sidebarId) {
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleDelete(sidebarId)));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.roleDelete(sidebarId)));
     }
 
     @PostMapping("/roleCreate")
     public ResponseEntity<Object> roleCreate(String author, String selectItem) {
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.roleCreate(author, selectItem)));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.roleCreate(author, selectItem)));
     }
 
     @GetMapping("/selectSidebarList")
     public ResponseEntity<Object> getSidebarList() {
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.SuccessMessage(userService.selectSidebarList()));
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.selectSidebarList()));
     }
 }

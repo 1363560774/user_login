@@ -23,7 +23,7 @@ public class ReturnMessage<T> {
     /**
      * i18ncode 如果有异常建议使用,没有异常默认success
      */
-    private String status = "success";
+    private Integer status = 0;
 
     /**
      * 请求成功失败标识 true成功 false失败  默认true
@@ -43,7 +43,7 @@ public class ReturnMessage<T> {
      * @param <T> 数据类型为泛型
      * @return 消息数据
      */
-    private static <T> ReturnMessage<T> createMessage(T data, String status, ReturnCode returnCode, Boolean success){
+    private static <T> ReturnMessage<T> createMessage(T data, Integer status, ReturnCode returnCode, Boolean success){
         ReturnMessage<T> returnMessage = new ReturnMessage<>();
         returnMessage.setData(data);
         returnMessage.setStatus(status);
@@ -53,18 +53,18 @@ public class ReturnMessage<T> {
     }
 
     public static <T> ReturnMessage<T> errorMessage(T data){
-        return createMessage(data,"error", ReturnCode.ERROR, Boolean.FALSE);
+        return createMessage(data,1, ReturnCode.ERROR, Boolean.FALSE);
     }
 
-    public static <T> ReturnMessage<T> SuccessMessage(T data){
-        return createMessage(data,"success", ReturnCode.SUCCESS, Boolean.TRUE);
+    public static <T> ReturnMessage<T> successMessage(T data){
+        return createMessage(data,0, ReturnCode.SUCCESS, Boolean.TRUE);
     }
 
-    public static <T> ReturnMessage<T> errorMessageDate(T data, String status){
+    public static <T> ReturnMessage<T> errorMessageDate(T data, Integer status){
         return createMessage(data, status, ReturnCode.ERROR, Boolean.FALSE);
     }
 
-    public static <T> ReturnMessage<T> SuccessMessage(){
-        return createMessage(null,"success", ReturnCode.SUCCESS, Boolean.TRUE);
+    public static <T> ReturnMessage<T> successMessage(){
+        return createMessage(null,0, ReturnCode.SUCCESS, Boolean.TRUE);
     }
 }

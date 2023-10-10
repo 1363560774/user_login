@@ -18,7 +18,7 @@ public enum ReturnCode {
     /**
      * 消息状态
      */
-    SUCCESS(20000, "成功"),
+    SUCCESS(0, "成功"),
     BAD_REQUEST(40000, "请求出错"),
     NOT_PRESENCE(40004, "请求不存在"),
     ERROR(50000, "服务器出错"),

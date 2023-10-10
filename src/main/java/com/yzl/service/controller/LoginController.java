@@ -53,9 +53,9 @@ public class LoginController {
         try {
             token = loginService.login(userLogin);
         } catch (Exception e) {
-            return ResponseEntity.ok().body(ReturnMessage.errorMessageDate(null,"登录失败，请校验用户名密码是否正确"));
+            return ResponseEntity.ok().body(ReturnMessage.errorMessageDate(null,1));
         }
-        return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(null));
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(null));
     }
 
     @GetMapping("/xcxLogin")
@@ -75,7 +75,7 @@ public class LoginController {
         } if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
             ip = request.getRemoteAddr();
         }
-        return ResponseEntity.ok().body(ReturnMessage.SuccessMessage(loginService.xcxLogin(js_code, ip)));
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(loginService.xcxLogin(js_code, ip)));
     }
 
     @PostMapping("/logout")
@@ -84,7 +84,7 @@ public class LoginController {
             // 获取用户信息
             Login userLogin = new Login();
             //返回用户
-            return ResponseEntity.ok(ReturnMessage.SuccessMessage(userLogin));
+            return ResponseEntity.ok(ReturnMessage.successMessage(userLogin));
         } catch (Exception e) {
             throw new RuntimeException();
         }
@@ -99,7 +99,7 @@ public class LoginController {
         try {
             UserInfo userInfo = userService.getById("userId");;
             Map<String, Object> map = new HashMap<>(5);
-            return ResponseEntity.ok(ReturnMessage.SuccessMessage(map));
+            return ResponseEntity.ok(ReturnMessage.successMessage(map));
         } catch (Exception e) {
             e.printStackTrace();
             return ResponseEntity.status(HttpStatus.FORBIDDEN).build();
@@ -145,7 +145,7 @@ public class LoginController {
         // 用来前端生成二维码
         data.put("uri", uri);
         // 生成二维码清除上一个用户的数据
-        return ResponseEntity.ok(ReturnMessage.SuccessMessage(data));
+        return ResponseEntity.ok(ReturnMessage.successMessage(data));
     }
 
     /**
