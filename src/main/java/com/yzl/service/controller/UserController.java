@@ -18,13 +18,11 @@ import java.util.List;
  */
 @RestController
 @RequestMapping("user")
-@CrossOrigin(origins = {"http://kai.zhaokai96.com:1024","http://localhost:1024"}, allowCredentials = "true")
 public class UserController {
 
     @Autowired
     private UserService userService;
 
-    @CrossOrigin
     @GetMapping("/userListPage")
     public ResponseEntity<Object> userListPage(Page<UserInfo> userInfoPage){
         Page<UserInfo> examItems = userService.userListPage(userInfoPage);
