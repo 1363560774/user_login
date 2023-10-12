@@ -36,6 +36,6 @@ public interface UserMapper extends BaseMapper<UserInfo>, Serializable {
 
     List<UserRoleRel> selectUserRoleRel(@Param("userIds") List<Long> userIds);
 
-    @Update("update tb_user_info set user_status = null where user_id = #{userId}")
-    Boolean updateUserStatus(@Param("userId") Long userId);
+    @Update("update tb_user set user_status = 2 where user_id = #{userId}")
+    Boolean updateUserStatus(@Param("userId") String userId);
 }

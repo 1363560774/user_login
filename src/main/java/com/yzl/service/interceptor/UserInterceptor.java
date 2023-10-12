@@ -36,7 +36,7 @@ public class UserInterceptor implements HandlerInterceptor {
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) {
         // 配置过滤校验的路径
         String requestUrl = request.getServletPath();
-        if (nonInterceptorProp.getNonInterceptor().contains(requestUrl)) {
+        if (nonInterceptorProp.getNonInterceptor().contains(requestUrl) || nonInterceptorProp.getNonInterceptor().contains("openAll")) {
             return true;
         }
         // 获取cookie中的unionId

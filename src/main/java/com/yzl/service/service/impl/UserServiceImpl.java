@@ -45,7 +45,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     public Boolean addUserInfo(UserInfo userInfo) {
         String userId = IdWorker.getIdStr();
         userInfo.setUserId(userId);
-        userInfo.setUserStatus(Boolean.FALSE);
+        userInfo.setUserStatus((short) 0);
         userInfo.setCreateTime(new Date());
         UserRoleRel userRoleRel = new UserRoleRel();
         userRoleRel.setUserId(userId);
@@ -62,7 +62,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     }
 
     @Override
-    public Boolean deleteUserInfo(Long userId) {
+    public Boolean deleteUserInfo(String userId) {
         return userMapper.updateUserStatus(userId);
     }
 
@@ -111,13 +111,14 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         page.setSize(userInfoPage.getSize());
         return userMapper.selectPage(page,
                 Wrappers.<UserInfo>lambdaQuery()
-                        .eq(StringUtils.isNotEmpty(userInfoPage.getStatus()),
-                                UserInfo::getUserStatus, userInfoPage.getStatus())
+                        .eq(userInfoPage.getSex() != null,
+                                UserInfo::getSex, userInfoPage.getSex())
                         .isNotNull(UserInfo::getUserStatus)
-                        .and(StringUtils.isNotEmpty(userInfoPage.getFilter()),
-                                wrapper -> wrapper.like(UserInfo::getUsername, userInfoPage.getFilter())
-                                        .or().eq(StringUtils.isNotEmpty(userInfoPage.getFilter()),
-                                                UserInfo::getUserId, userInfoPage.getFilter())));
+                        .in(UserInfo::getUserStatus, 0, 1)
+                        .and(StringUtils.isNotEmpty(userInfoPage.getUsername()),
+                                wrapper -> wrapper.like(UserInfo::getUsername, userInfoPage.getUsername())
+                                        .or().eq(StringUtils.isNotEmpty(userInfoPage.getUsername()),
+                                                UserInfo::getUserId, userInfoPage.getUsername())));
     }
 
     @Override

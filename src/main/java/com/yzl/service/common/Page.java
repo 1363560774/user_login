@@ -18,4 +18,8 @@ public class Page<T> extends com.baomidou.mybatisplus.extension.plugins.paginati
     private String status;
 
     private String filter;
+
+    private String username;
+
+    private Boolean sex;
 }

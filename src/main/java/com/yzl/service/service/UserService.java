@@ -33,7 +33,7 @@ public interface UserService extends IService<UserInfo> {
      * @param userId 用户id
      * @return 是否删除成功
      */
-    Boolean deleteUserInfo(Long userId);
+    Boolean deleteUserInfo(String userId);
 
     /**
      * 根据用户名密码获取UserInfo对象

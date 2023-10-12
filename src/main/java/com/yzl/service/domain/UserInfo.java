@@ -51,9 +51,9 @@ public class UserInfo extends CommonFields {
      */
     private String address;
     /**
-     * 用户状态（0->创建，1->激活）
+     * 用户状态（0->创建，1->激活， 2->删除）
      */
-    private Boolean userStatus;
+    private Short userStatus;
     /**
      * 个人简介
      */

@@ -60,7 +60,7 @@ public class UserController {
     }
 
     @DeleteMapping("/deleteUserInfo")
-    public ResponseEntity<Object> deleteUserInfo(@RequestParam Long userId) {
+    public ResponseEntity<Object> deleteUserInfo(String userId) {
         Boolean data = userService.deleteUserInfo(userId);
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(data));
     }
