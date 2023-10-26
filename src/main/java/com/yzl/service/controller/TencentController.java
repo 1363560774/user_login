@@ -17,12 +17,12 @@ public class TencentController {
     private TencentService tencentService;
 
     @PostMapping("/textToVoice")
-    public ResponseEntity<Object> askCallBask(String text){
+    public ResponseEntity<Object> textToVoice(String text){
         return ResponseEntity.ok().body(ReturnMessage.successMessage(tencentService.textToVoice(text)));
     }
 
-    @PostMapping("/ttsCallBask")
-    public ResponseEntity<Object> ttsCallBask(String url){
+    @PostMapping("/voiceToText")
+    public ResponseEntity<Object> voiceToText(String url){
         return ResponseEntity.ok().body(ReturnMessage.successMessage(tencentService.voiceToText(url, "", false)));
     }
 
