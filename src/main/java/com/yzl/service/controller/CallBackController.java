@@ -4,7 +4,7 @@ import com.yzl.service.common.ReturnMessage;
 import com.yzl.service.service.CallBackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -15,7 +15,7 @@ public class CallBackController {
     @Autowired
     private CallBackService callBackService;
 
-    @GetMapping("/describeTaskResponse")
+    @PostMapping("/describeTaskResponse")
     public ResponseEntity<Object> describeTaskResponse(Integer code, String message, Long requestId, Long appid, Long projectid, String audioUrl, String text, String resultDetail, Double audioTime){
         return ResponseEntity.ok().body(ReturnMessage.successMessage(callBackService.describeTaskResponse()));
     }
