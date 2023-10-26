@@ -1,6 +1,8 @@
 package com.yzl.service.controller;
 
+import com.alibaba.fastjson.JSONObject;
 import com.yzl.service.common.ReturnMessage;
+import com.yzl.service.dto.CallBackDto;
 import com.yzl.service.service.CallBackService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -15,13 +17,15 @@ public class CallBackController {
     @Autowired
     private CallBackService callBackService;
 
-    @PostMapping("/describeTaskResponse")
-    public ResponseEntity<Object> describeTaskResponse(Integer code, String message, Long requestId, Long appid, Long projectid, String audioUrl, String text, String resultDetail, Double audioTime){
-        return ResponseEntity.ok().body(ReturnMessage.successMessage(callBackService.describeTaskResponse()));
+    @PostMapping("/asrCallBask")
+    public ResponseEntity<Object> askCallBask(Integer code, String message, Long requestId, Long appid, Long projectid, String audioUrl, String text, String resultDetail, Double audioTime){
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(callBackService.asrCallBack(
+                code, message, requestId, appid, projectid, audioUrl, text, resultDetail, audioTime)));
     }
 
-    @PostMapping("/tts")
-    public ResponseEntity<Object> tts(String data){
-        return ResponseEntity.ok().body(ReturnMessage.successMessage(data));
+    @PostMapping("/ttsCallBask")
+    public ResponseEntity<Object> ttsCallBask(String data){
+        CallBackDto callBackDto = JSONObject.parseObject(data, CallBackDto.class);
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(callBackService.ttsCallBack(callBackDto)));
     }
 }

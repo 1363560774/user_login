@@ -9,5 +9,4 @@ class YzlServiceApplicationTests {
     @Test
     void contextLoads() {
     }
-
 }
