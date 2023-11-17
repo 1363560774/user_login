@@ -23,6 +23,8 @@ public enum ItemType {
     READING(5, "阅读理解"),
     WRITING(6, "写作"),
     HEARING(7, "听力"),
+    CONVERSION(8, "英汉互译"),
+    COMMUNICATION(9, "口语交际"),
     ;
     private int code;
 

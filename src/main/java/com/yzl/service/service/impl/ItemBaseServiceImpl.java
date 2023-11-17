@@ -43,7 +43,7 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
             itemBase.setShowOrder(1);
             Date date = new Date();
             itemBase.setCreateTime(date);
-            itemBase.setUpdateTime(date);
+            itemBase.setLastUpdateTime(date);
             itemBaseMapper.insert(itemBase);
             return itemBase;
         }
@@ -66,7 +66,7 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
         itemBase.setShowOrder((int) (subCount + 1));
         Date date = new Date();
         itemBase.setCreateTime(date);
-        itemBase.setUpdateTime(date);
+        itemBase.setLastUpdateTime(date);
         if (StringUtils.isBlank(itemBase.getBaseId())) {
             itemBase.setBaseId(IdWorker.getIdStr());
             return itemBaseMapper.insert(itemBase);

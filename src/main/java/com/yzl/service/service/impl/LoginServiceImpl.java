@@ -85,7 +85,7 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
             loginLog.setLoginIp(loginIp);
             Date date = new Date();
             loginLog.setCreateTime(date);
-            loginLog.setUpdateTime(date);
+            loginLog.setLastUpdateTime(date);
             loginLogMapper.insert(loginLog);
             String userSessionKey = RedisKey.loadUserSessionKey(wxDto.getUnionId());
             redisTemplate.opsForValue().set(userSessionKey, wxDto.getSessionKey());
