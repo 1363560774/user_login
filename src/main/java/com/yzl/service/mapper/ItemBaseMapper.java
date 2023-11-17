@@ -16,11 +16,11 @@ import java.util.List;
 public interface ItemBaseMapper extends com.baomidou.mybatisplus.core.mapper.BaseMapper<ItemBase>, Serializable {
 
     @Select("WITH RECURSIVE ItemTree AS (\n" +
-            "    SELECT base_id, parent_id, base_name, create_time, update_time\n" +
+            "    SELECT base_id, parent_id, base_name, show_order, create_time, update_time\n" +
             "    FROM tb_item_base\n" +
             "    WHERE base_id = #{baseId}\n" +
             "    UNION ALL\n" +
-            "    SELECT c.base_id, c.parent_id, c.base_name, c.create_time, c.update_time\n" +
+            "    SELECT c.base_id, c.parent_id, c.base_name, c.show_order, c.create_time, c.update_time\n" +
             "    FROM tb_item_base c\n" +
             "    JOIN ItemTree p ON p.base_id = c.parent_id\n" +
             ")SELECT * FROM ItemTree;")
