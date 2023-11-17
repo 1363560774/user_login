@@ -46,7 +46,7 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
     }
 
     @Override
-    public Item addItem(Item item) {
-        return null;
+    public Boolean addItem(Item item) {
+        return itemMapper.insert(item) > 0;
     }
 }

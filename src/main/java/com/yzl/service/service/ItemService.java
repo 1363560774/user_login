@@ -20,7 +20,7 @@ public interface ItemService extends IService<Item> {
     /**
      * 添加试题
      * @param item 试题信息
-     * @return 试题信息
+     * @return 是否成功
      */
-    Item addItem(Item item);
+    Boolean addItem(Item item);
 }

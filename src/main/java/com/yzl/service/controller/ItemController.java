@@ -28,7 +28,7 @@ public class ItemController {
 
     @PostMapping("/addItem")
     public ResponseEntity<Object> addItem(Item item){
-        Item addItem = itemService.addItem(item);
+        Boolean addItem = itemService.addItem(item);
         return ResponseEntity.ok().body(ReturnMessage.successMessage(addItem));
     }
 }

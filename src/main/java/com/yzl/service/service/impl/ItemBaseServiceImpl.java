@@ -40,6 +40,7 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
             itemBase.setBaseId(IdWorker.getIdStr());
             itemBase.setParentId("");
             itemBase.setBaseName("全部");
+            itemBase.setShowOrder(1);
             Date date = new Date();
             itemBase.setCreateTime(date);
             itemBase.setUpdateTime(date);
@@ -60,6 +61,9 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
         if (StringUtils.isBlank(itemBase.getParentId())) {
             throw new YzlException(ExceptionEnum.ITEM_BASE_PARENT_ID_IS_EMPTY);
         }
+        Long subCount = itemBaseMapper.selectCount(Wrappers.<ItemBase>lambdaQuery()
+                .eq(ItemBase::getParentId, itemBase.getBaseId()));
+        itemBase.setShowOrder((int) (subCount + 1));
         Date date = new Date();
         itemBase.setCreateTime(date);
         itemBase.setUpdateTime(date);
@@ -67,6 +71,11 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
             itemBase.setBaseId(IdWorker.getIdStr());
             return itemBaseMapper.insert(itemBase);
         } else {
+            Long count = itemBaseMapper.selectCount(Wrappers.<ItemBase>lambdaQuery()
+                    .eq(ItemBase::getBaseName, itemBase.getBaseName()));
+            if (count > 0) {
+                throw new YzlException(ExceptionEnum.ITEM_BASE_NAME_IS_REPEAT);
+            }
             return itemBaseMapper.updateById(itemBase);
         }
     }
