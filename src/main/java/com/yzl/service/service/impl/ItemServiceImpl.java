@@ -44,4 +44,9 @@ public class ItemServiceImpl extends ServiceImpl<ItemMapper, Item> implements It
                         wrapper -> wrapper.like(Item::getItemName, itemPage.getFilter()).or()
                                 .eq(Item::getItemCode, itemPage.getFilter())));
     }
+
+    @Override
+    public Item addItem(Item item) {
+        return null;
+    }
 }

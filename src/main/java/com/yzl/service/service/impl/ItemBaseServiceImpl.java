@@ -1,6 +1,7 @@
 package com.yzl.service.service.impl;
 
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
+import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzl.service.common.ExceptionEnum;
 import com.yzl.service.common.YzlException;
@@ -30,11 +31,14 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
 
     @Override
     public ItemBase loadItemBaseTree(String baseId) {
+        if (StringUtils.isBlank(baseId)) {
+            ItemBase itemBase = itemBaseMapper.selectOne(
+                    Wrappers.<ItemBase>lambdaQuery().eq(ItemBase::getParentId, ""));
+            baseId = itemBase.getBaseId();
+        }
         List<ItemBase> itemBases = itemBaseMapper.selectItemBaseTree(baseId);
-        ItemBase itemBase = itemBases.stream()
-                .filter(base -> StringUtils.isBlank(base.getParentId()))
-                .findFirst().orElse(new ItemBase());
-        if (StringUtils.isBlank(itemBase.getBaseName())) {
+        ItemBase itemBase = itemBases.stream().findFirst().orElse(new ItemBase());
+        if (StringUtils.isBlank(itemBase.getBaseName()) && StringUtils.isBlank(baseId)) {
             itemBase.setBaseId(IdWorker.getIdStr());
             itemBase.setParentId("");
             itemBase.setBaseName("全部");

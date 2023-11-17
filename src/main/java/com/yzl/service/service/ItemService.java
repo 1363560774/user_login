@@ -16,4 +16,11 @@ public interface ItemService extends IService<Item> {
      * @return 试题分页
      */
     Page<Item> loadItemPage(Page<Item> itemPage, Item item);
+
+    /**
+     * 添加试题
+     * @param item 试题信息
+     * @return 试题信息
+     */
+    Item addItem(Item item);
 }

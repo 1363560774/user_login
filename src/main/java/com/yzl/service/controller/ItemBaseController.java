@@ -6,6 +6,7 @@ import com.yzl.service.service.ItemBaseService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -26,8 +27,8 @@ public class ItemBaseController {
         return ResponseEntity.ok().body(ReturnMessage.successMessage(itemBase));
     }
 
-    @GetMapping("/loadItemBaseTree")
-    public ResponseEntity<Object> loadItemBaseTree(ItemBase itemBase){
+    @PostMapping("/editItemBase")
+    public ResponseEntity<Object> editItemBase(ItemBase itemBase){
         Integer count = itemBaseService.editItemBase(itemBase);
         return ResponseEntity.ok().body(ReturnMessage.successMessage(count > 0));
     }
