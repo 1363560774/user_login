@@ -15,4 +15,11 @@ public interface ItemBaseService extends IService<ItemBase> {
      * @return 题库树
      */
     ItemBase loadItemBaseTree(String baseId);
+
+    /**
+     * 编辑题库 没有主键时新增,有主键是修改
+     * @param itemBase 题库信息
+     * @return 修改数据条数
+     */
+    Integer editItemBase(ItemBase itemBase);
 }

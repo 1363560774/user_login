@@ -25,4 +25,10 @@ public class ItemBaseController {
         ItemBase itemBase = itemBaseService.loadItemBaseTree(baseId);
         return ResponseEntity.ok().body(ReturnMessage.successMessage(itemBase));
     }
+
+    @GetMapping("/loadItemBaseTree")
+    public ResponseEntity<Object> loadItemBaseTree(ItemBase itemBase){
+        Integer count = itemBaseService.editItemBase(itemBase);
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(count > 0));
+    }
 }

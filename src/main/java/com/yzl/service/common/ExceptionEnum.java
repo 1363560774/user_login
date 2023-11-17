@@ -21,6 +21,8 @@ public enum ExceptionEnum {
     USER_NAME_PASSWORD_ERROR(400, "用户名密码错误"),
     USER_STATUS_FREEZE(400, "用户被冻结"),
     ERROR_PASSWORD(400, "密码错误"),
+    ITEM_BASE_NAME_IS_EMPTY(500, "题库名称不能为空"),
+    ITEM_BASE_PARENT_ID_IS_EMPTY(500, "题库父类不能为空"),
     ;
     private int status;
 
