@@ -14,5 +14,13 @@ public class CommonFields implements Serializable {
     /**
      * 最后修改时间
      */
-    private Date updateTime;
+    private Date lastUpdateTime;
+    /**
+     * 创建人
+     */
+    private String createBy;
+    /**
+     * 最后修改人
+     */
+    private String lastUpdateBy;
 }
