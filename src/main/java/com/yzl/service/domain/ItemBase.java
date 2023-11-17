@@ -1,9 +1,12 @@
 package com.yzl.service.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+
+import java.util.List;
 
 /**
  * @author kai
@@ -21,4 +24,6 @@ public class ItemBase extends CommonFields {
     private String baseName;
     /** 父类id **/
     private String parentId;
+    @TableField(exist = false)
+    private List<ItemBase> itemBaseSubs;
 }
