@@ -6,22 +6,20 @@ import com.baomidou.mybatisplus.core.toolkit.Wrappers;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzl.service.common.Constant;
 import com.yzl.service.common.Page;
-import com.yzl.service.domain.Login;
-import com.yzl.service.domain.Sidebar;
-import com.yzl.service.domain.UserInfo;
+import com.yzl.service.domain.*;
 import com.yzl.service.mapper.LoginMapper;
+import com.yzl.service.mapper.MenuMapper;
 import com.yzl.service.mapper.SidebarMapper;
 import com.yzl.service.mapper.UserMapper;
 import com.yzl.service.service.UserService;
-import com.yzl.service.domain.UserRoleRel;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @author kai
@@ -39,6 +37,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
 
     @Autowired
     private LoginMapper loginMapper;
+
+    @Autowired
+    private MenuMapper menuMapper;
 
     @Override
     @Transactional
@@ -67,12 +68,12 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     }
 
     @Override
-    public void checkUserByUserIdAndPassword(String userId, String password) {
+    public UserInfo checkUserByUserIdAndPassword(String loginName, String password) {
         Login login = loginMapper.selectOne(
                 Wrappers.<Login>lambdaQuery()
-                        .eq(Login::getLoginName, userId)
-                        .eq(Login::getPasswd, password));
-        UserInfo userInfo = userMapper.selectById(userId);
+                        .eq(Login::getLoginName, loginName)
+                        .eq(Login::getPassword, password));
+        return userMapper.selectById(login.getLoginId());
     }
 
     @Override
@@ -134,5 +135,32 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
     @Override
     public List<Sidebar> selectSidebarList() {
         return sidebarMapper.selectRoleSidebar();
+    }
+
+    @Override
+    public UserInfo loadUserInfoById(String userId) {
+        return userMapper.selectById(userId);
+    }
+
+    @Override
+    public List<Menu> loadMenu() {
+        List<Menu> menus = menuMapper.selectList(Wrappers.lambdaQuery());
+        Map<Integer, List<Menu>> menuMap = menus.stream()
+                .collect(Collectors.groupingBy(Menu::getPid));
+        List<Menu> menusList = menuMap.get(0);
+        menusList.forEach(menu -> {
+            menusTreeLoad(menu, menuMap);
+        });
+        return menusList;
+    }
+
+    private void menusTreeLoad(Menu menu, Map<Integer, List<Menu>> menuMap) {
+        List<Menu> menus = menuMap.get(menu.getId());
+        if (menus == null) {
+            return;
+        }
+        menus.sort(Comparator.comparing(Menu::getShowOrder));
+        menu.setChildren(menus);
+        menus.forEach(base-> menusTreeLoad(base, menuMap));
     }
 }

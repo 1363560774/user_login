@@ -36,6 +36,11 @@ public class ReturnMessage<T> {
     private Integer code = ReturnCode.SUCCESS.getCode();
 
     /**
+     * 消息内容
+     */
+    private String msg;
+
+    /**
      * 创建响应对象
      * @param data 返回数据
      * @param status 状态
@@ -49,6 +54,7 @@ public class ReturnMessage<T> {
         returnMessage.setStatus(status);
         returnMessage.setSuccess(success);
         returnMessage.setCode(returnCode.getCode());
+        returnMessage.setMsg(returnCode.getMsg());
         return returnMessage;
     }
 

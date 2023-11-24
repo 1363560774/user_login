@@ -4,9 +4,11 @@ import com.alibaba.fastjson.JSONObject;
 import com.baomidou.mybatisplus.core.toolkit.IdWorker;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzl.service.common.RedisKey;
+import com.yzl.service.common.utils.CodecUtils;
 import com.yzl.service.common.utils.RestTemplate;
 import com.yzl.service.domain.Login;
 import com.yzl.service.domain.LoginLog;
+import com.yzl.service.domain.UserInfo;
 import com.yzl.service.dto.WxDto;
 import com.yzl.service.mapper.LoginLogMapper;
 import com.yzl.service.mapper.LoginMapper;
@@ -57,17 +59,23 @@ public class LoginServiceImpl extends ServiceImpl<LoginMapper, Login> implements
      * @return 登录信息
      */
     @Override
-    public String login(Login login) {
-        String newPassword = "CodecUtils.md5Hex(userLogin.getPasswd(), jwtProp.getSalt())";
+    public UserInfo login(Login login, String loginIp) {
+        String newPassword = CodecUtils.md5Hex(login.getPassword(), null);
         //校验用户
-        userService.checkUserByUserIdAndPassword("", newPassword);
-//        log.info("登录成功{}", login.getUserId());
-//        UserRole userRole = roleMapper.selectMaxUserRole(login.getUserId());
-//        login.setRole(userRole.getRoleType());
-//        UserContainer.setUser(login);
-//        // 利用JWT工具，生成token返回
-//        return JwtUtils.generateToken(login, jwtProp.getPrivateKey(), jwtProp.getExpire());
-        return newPassword;
+        UserInfo userInfo = userService.checkUserByUserIdAndPassword(login.getLoginName(), newPassword);
+        userInfo.setToken(userInfo.getUserId());
+        LoginLog loginLog = new LoginLog();
+        loginLog.setLogId(IdWorker.getIdStr());
+        loginLog.setLoginId(userInfo.getUserId());
+        loginLog.setLoginIp(loginIp);
+        Date date = new Date();
+        loginLog.setCreateTime(date);
+        loginLog.setLastUpdateTime(date);
+        loginLogMapper.insert(loginLog);
+        String userSessionKey = RedisKey.loadUserSessionKey(userInfo.getUserId());
+        redisTemplate.opsForValue().set(userSessionKey, userInfo.getUserId());
+        redisTemplate.expire(userSessionKey, wxProperties.getExpireTime(), TimeUnit.SECONDS);
+        return userInfo;
     }
 
     @Override

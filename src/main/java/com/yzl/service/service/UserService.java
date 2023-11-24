@@ -3,6 +3,7 @@ package com.yzl.service.service;
 
 import com.baomidou.mybatisplus.extension.service.IService;
 import com.yzl.service.common.Page;
+import com.yzl.service.domain.Menu;
 import com.yzl.service.domain.Sidebar;
 import com.yzl.service.domain.UserInfo;
 
@@ -37,11 +38,11 @@ public interface UserService extends IService<UserInfo> {
 
     /**
      * 根据用户名密码获取UserInfo对象
-     * @param userId 用户id
+     * @param loginName 登录名
      * @param password 密码
      * @return 用户对象
      */
-    void checkUserByUserIdAndPassword(String userId, String password);
+    UserInfo checkUserByUserIdAndPassword(String loginName, String password);
 
     /**
      * admin获取UserInfo拥有权限的页面
@@ -71,4 +72,8 @@ public interface UserService extends IService<UserInfo> {
     List<UserInfo> userListByUsername(String username);
 
     List<Sidebar> selectSidebarList();
+
+    UserInfo loadUserInfoById(String userId);
+
+    List<Menu> loadMenu();
 }

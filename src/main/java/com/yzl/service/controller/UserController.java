@@ -2,6 +2,7 @@ package com.yzl.service.controller;
 
 import com.yzl.service.common.Page;
 import com.yzl.service.common.ReturnMessage;
+import com.yzl.service.domain.Menu;
 import com.yzl.service.domain.UserInfo;
 import com.yzl.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,9 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 
 /**
  * 用户前端交互层
@@ -80,8 +83,48 @@ public class UserController {
         return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.roleCreate(author, selectItem)));
     }
 
-    @GetMapping("/selectSidebarList")
-    public ResponseEntity<Object> getSidebarList() {
-        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(userService.selectSidebarList()));
+    @GetMapping("/loadMenu")
+    public ResponseEntity<Object> loadMenu(){
+        List<Menu> menus = userService.loadMenu();
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(menus));
+    }
+
+    @GetMapping("/selectMenuList")
+    public ResponseEntity<Object> selectMenuList() {
+        Map<String, Object> map = new HashMap<>();
+        List<Menu> menus = userService.loadMenu();
+        map.put("menus", menus);
+        Map<String, Object> adminInfo = new HashMap<>();
+        Map<String, Object> siteConfig = new HashMap<>();
+        Map<String, Object> terminal = new HashMap<>();
+        terminal.put("installServicePort", "8000");
+        terminal.put("npmPackageManager", "pnpm");
+        map.put("terminal", terminal);
+        Map<String, Object> upload = new HashMap<>();
+        upload.put("maxsize", 10485760);
+        upload.put("savename", "/storage/{topic}/{year}{mon}{day}/{filename}{filesha1}{.suffix}");
+        upload.put("mimetype", "jpg,png,bmp,jpeg,gif,webp,zip,rar,xls,xlsx,doc,docx,wav,mp4,mp3,txt");
+        upload.put("mode", "local");
+        siteConfig.put("siteName", "BuildAdmin演示站");
+        siteConfig.put("version", "v1.0.0");
+        siteConfig.put("cdnUrl", "https://demo.buildadmin.com");
+        siteConfig.put("apiUrl", "https://buildadmin.com");
+        siteConfig.put("upload", upload);
+        map.put("siteConfig", siteConfig);
+        adminInfo.put("avatar", "/static/images/avatar.png");
+        adminInfo.put("id", 1);
+        adminInfo.put("last_login_time", "2023-11-22 14:17:59");
+        adminInfo.put("nickname", "Admin");
+        adminInfo.put("super", true);
+        adminInfo.put("username", "admin");
+        map.put("adminInfo", adminInfo);
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(map));
+    }
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<Object> dashboard() {
+        Map<String, Object> map = new HashMap<>();
+        map.put("remark", "开源等于互助；开源需要大家一起来支持，支持的方式有很多种，比如使用、推荐、写教程、保护生态、贡献代码、回答问题、分享经验、打赏赞助等；欢迎您加入我们！");
+        return ResponseEntity.status(HttpStatus.OK).body(ReturnMessage.successMessage(map));
     }
 }

@@ -1,5 +1,6 @@
 package com.yzl.service.domain;
 
+import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.*;
@@ -29,5 +30,9 @@ public class Login extends CommonFields {
     /**
      * 密码
      */
-    private String passwd;
+    private String password;
+    @TableField(exist = false)
+    private Boolean keep;
+    @TableField(exist = false)
+    private String captchaId;
 }

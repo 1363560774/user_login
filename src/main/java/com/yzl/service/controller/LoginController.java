@@ -1,7 +1,9 @@
 package com.yzl.service.controller;
 
 import com.alibaba.fastjson.JSONObject;
+import com.yzl.service.common.ExceptionEnum;
 import com.yzl.service.common.ReturnMessage;
+import com.yzl.service.common.utils.CookieUtils;
 import com.yzl.service.common.utils.RestTemplate;
 import com.yzl.service.common.utils.WxTokenUtils;
 import com.yzl.service.domain.Login;
@@ -49,32 +51,21 @@ public class LoginController {
             @RequestBody Login userLogin,
             HttpServletResponse response, HttpServletRequest request){
         // 登录
-        String token;
+        Map<String, Object> map = new HashMap<>();
         try {
-            token = loginService.login(userLogin);
+            String ip = CookieUtils.loadIp(request);
+            UserInfo userInfo = loginService.login(userLogin, ip);
+            map.put("routePath", "/admin");
+            map.put("userInfo", userInfo);
         } catch (Exception e) {
-            return ResponseEntity.ok().body(ReturnMessage.errorMessageDate(null,1));
+            return ResponseEntity.ok().body(ReturnMessage.errorMessage(ExceptionEnum.USER_NAME_PASSWORD_ERROR));
         }
-        return ResponseEntity.ok().body(ReturnMessage.successMessage(null));
+        return ResponseEntity.ok().body(ReturnMessage.successMessage(map));
     }
 
     @GetMapping("/xcxLogin")
     public ResponseEntity<Object> xcxLogin(String js_code, HttpServletRequest request){
-        String ip = request.getHeader("x-forwarded-for");
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("Proxy-Client-IP");
-        }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("WL-Proxy-Client-IP");
-        }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_CLIENT_IP");
-        }
-        if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getHeader("HTTP_X_FORWARDED_FOR");
-        } if (ip == null || ip.isEmpty() || "unknown".equalsIgnoreCase(ip)) {
-            ip = request.getRemoteAddr();
-        }
+        String ip = CookieUtils.loadIp(request);
         return ResponseEntity.ok().body(ReturnMessage.successMessage(loginService.xcxLogin(js_code, ip)));
     }
 
