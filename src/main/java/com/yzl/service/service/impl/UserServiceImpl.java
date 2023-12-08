@@ -7,10 +7,7 @@ import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.yzl.service.common.Constant;
 import com.yzl.service.common.Page;
 import com.yzl.service.domain.*;
-import com.yzl.service.mapper.LoginMapper;
-import com.yzl.service.mapper.MenuMapper;
-import com.yzl.service.mapper.SidebarMapper;
-import com.yzl.service.mapper.UserMapper;
+import com.yzl.service.mapper.*;
 import com.yzl.service.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.lang3.StringUtils;
@@ -37,6 +34,9 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
 
     @Autowired
     private LoginMapper loginMapper;
+
+    @Autowired
+    private TDesignMenuMapper tDesignMenuMapper;
 
     @Autowired
     private MenuMapper menuMapper;
@@ -154,6 +154,21 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         return menusList;
     }
 
+    @Override
+    public List<TDesignMenu> loadTdMenu() {
+        List<TDesignMenu> tDesignMenus = tDesignMenuMapper.selectList(Wrappers.lambdaQuery());
+        if (tDesignMenus.isEmpty()) {
+            return new ArrayList<>(0);
+        }
+        Map<Integer, List<TDesignMenu>> tdMenuMap = tDesignMenus.stream()
+                .collect(Collectors.groupingBy(TDesignMenu::getPid));
+        List<TDesignMenu> menusList = tdMenuMap.get(0);
+        menusList.forEach(menu -> {
+            tdMenusTreeLoad(menu, tdMenuMap);
+        });
+        return menusList;
+    }
+
     private void menusTreeLoad(Menu menu, Map<Integer, List<Menu>> menuMap) {
         List<Menu> menus = menuMap.get(menu.getId());
         if (menus == null) {
@@ -162,5 +177,22 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, UserInfo> implement
         menus.sort(Comparator.comparing(Menu::getShowOrder));
         menu.setChildren(menus);
         menus.forEach(base-> menusTreeLoad(base, menuMap));
+    }
+
+    private void tdMenusTreeLoad(TDesignMenu menu, Map<Integer, List<TDesignMenu>> menuMap) {
+        TDesignMenu.Meta meta = new TDesignMenu.Meta();
+        meta.setIcon(menu.getIcon());
+        TDesignMenu.Language language = new TDesignMenu.Language();
+        language.setZh_CN(menu.getCnTitle());
+        language.setEn_US(menu.getUsTitle());
+        meta.setTitle(language);
+        menu.setMeta(meta);
+        List<TDesignMenu> menus = menuMap.get(menu.getId());
+        if (menus == null) {
+            return;
+        }
+        menus.sort(Comparator.comparing(TDesignMenu::getShowOrder));
+        menu.setChildren(menus);
+        menus.forEach(base-> tdMenusTreeLoad(base, menuMap));
     }
 }

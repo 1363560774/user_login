@@ -66,6 +66,10 @@ public class ReturnMessage<T> {
         return createMessage(data,0, ReturnCode.SUCCESS, Boolean.TRUE);
     }
 
+    public static <T> ReturnMessage<T> amisSuccessMessage(T data){
+        return createMessage(data,0, ReturnCode.AMIS_SUCCESS, Boolean.TRUE);
+    }
+
     public static <T> ReturnMessage<T> errorMessageDate(T data, Integer status){
         return createMessage(data, status, ReturnCode.ERROR, Boolean.FALSE);
     }

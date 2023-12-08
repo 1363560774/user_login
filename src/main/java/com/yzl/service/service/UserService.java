@@ -5,6 +5,7 @@ import com.baomidou.mybatisplus.extension.service.IService;
 import com.yzl.service.common.Page;
 import com.yzl.service.domain.Menu;
 import com.yzl.service.domain.Sidebar;
+import com.yzl.service.domain.TDesignMenu;
 import com.yzl.service.domain.UserInfo;
 
 import java.util.List;
@@ -76,4 +77,10 @@ public interface UserService extends IService<UserInfo> {
     UserInfo loadUserInfoById(String userId);
 
     List<Menu> loadMenu();
+
+    /**
+     * TDesign菜单栏
+     * @return 菜单栏数据
+     */
+    List<TDesignMenu> loadTdMenu();
 }

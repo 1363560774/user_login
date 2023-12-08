@@ -86,7 +86,8 @@ public class ItemBaseServiceImpl extends ServiceImpl<ItemBaseMapper, ItemBase> i
             return;
         }
         itemBases.sort(Comparator.comparing(ItemBase::getShowOrder));
-        itemBase.setItemBaseSubs(itemBases);
+//        itemBase.setItemBaseSubs(itemBases);
+        itemBase.setChildren(itemBases);
         itemBases.forEach(base-> treeLoad(base, baseMap));
     }
 }

@@ -26,6 +26,8 @@ public class ItemBase extends CommonFields {
     private String parentId;
     /** 排序 **/
     private Integer showOrder;
+//    @TableField(exist = false)
+//    private List<ItemBase> itemBaseSubs;
     @TableField(exist = false)
-    private List<ItemBase> itemBaseSubs;
+    private List<ItemBase> children;
 }

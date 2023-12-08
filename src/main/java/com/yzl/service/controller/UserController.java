@@ -3,6 +3,7 @@ package com.yzl.service.controller;
 import com.yzl.service.common.Page;
 import com.yzl.service.common.ReturnMessage;
 import com.yzl.service.domain.Menu;
+import com.yzl.service.domain.TDesignMenu;
 import com.yzl.service.domain.UserInfo;
 import com.yzl.service.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -87,6 +88,14 @@ public class UserController {
     public ResponseEntity<Object> loadMenu(){
         List<Menu> menus = userService.loadMenu();
         return ResponseEntity.ok().body(ReturnMessage.successMessage(menus));
+    }
+
+    @GetMapping("/loadTdMenu")
+    public ResponseEntity<Object> loadTdMenu(){
+        List<TDesignMenu> tDesignMenus = userService.loadTdMenu();
+        Map<String, List<TDesignMenu>> list = new HashMap<>();
+        list.put("list", tDesignMenus);
+        return ResponseEntity.ok().body(ReturnMessage.amisSuccessMessage(list));
     }
 
     @GetMapping("/selectMenuList")
